@@ -39,7 +39,8 @@ jobs:
       - name: Sync ops subtree
         run: |
           DEBUG=1 ./scripts/subtree50 check-remotes
-          ./scripts/subtree50 pull codespaces
+          ./scripts/subtree50 pull codespace
+          ./scripts/subtree50 pull me50
           ./scripts/subtree50 merge profile
           git push
         env:
