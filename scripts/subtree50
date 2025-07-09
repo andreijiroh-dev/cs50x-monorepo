@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+# subtree50 - Shell script for managing subtrees on CS50-related repositories via an monorepo
+
+set -o pipefail
+
+if [[ $DEBUG != "" ]]; then
+    set -x
+fi
+
+error() {
+    echo "Error: $1" >&2
+    exit 1
+}
+
+warn() {
+    echo "Warning: $1" >&2
+}
+
+info() {
+    echo "Info: $1"
+}
+
+debug() {
+    [[ $DEBUG != "" ]] && echo "Debug: $1"
+}
+
+try_dotenvx_loader() {
+    if command -v dotenvx &> /dev/null; then
+        if [[ $CODESPACES != "true" ]] && [[ -f "$PWD/.env.keys" ]]; then
+            eval "$(dotenvx get --format eval)"
+        else
+            warn ".env.keys not found in workspace root or running in GitHub Codespaces"
+        fi
+    else
+        warn "dotenvx command not found, run 'npm i' to install dotenvx (and friends)"
+    fi
+}
+
+help() {
+    echo "Usage: $0 <git-subtree command> <codespace|me50|profile>"
+    echo
+    echo "Supports most git-subtree commands (push, pull, merge) for the following subtrees"
+    echo
+    echo "Additional commands:"
+    echo "  check-remotes - check if the remote repositories are set up correctly"
+    echo "  help - Show this help message"
+    exit 0
+}
+
+# load configs from .env first
+try_dotenvx_loader
+
+## CS50x-specific GitHub account
+GH_CS50_UID="${GH_CS60_UID:-"219805467"}"
+GH_CS50_USERNAME="${GH_CS50_USERNAME:-"andreijirohdev-cs50x"}"
+## main GitHub account for mirroring and subtree commands, usued at the moment
+GH_UID="${GH_UID:-"219805467"}"
+GH_USERNAME="${GH_USERNAME:-"ajhalili2006"}"
+GH_CS50_TOKEN="${GH_CS50_TOKEN}"
+
+CODE50_REPO="https://${GH_CS50_USERNAME}:${GH_CS50_TOKEN}@github.com/code50/${GH_CS50_UID}.git"
+ME50_REPO="https://${GH_CS50_USERNAME}:${GH_CS50_TOKEN}@github.com/me50/${GH_CS50_USERNAME}.git"
+PROFILE_REPO="https://${GH_CS50_USERNAME}:${GH_CS50_TOKEN}@github.com/${GH_CS50_USERNAME}/${GH_CS50_USERNAME}.git"
+
+if [[ $1 == "" || $1 == "--help" || $1 == "-h" || "$1" == "help" ]]; then
+    help
+elif [[ $1 == "push" || $1 == "pull" || $1 == "merge" || $1 == "add" || $1 == "merge" || "$1" == "spilt" ]]; then
+    if [ -z "${GH_CS50_TOKEN}" ]; then
+        error "missing dedicated GitHub token for CS50x-specific account, see warnings above or try again in https://cs50.dev/open"
+    fi
+    if [[ $2 == "codespace" ]]; then
+        git subtree "$1" --prefix=codespace code50 main || error "Failed to $1 code50 subtree"
+    elif [[ $2 == "me50" ]]; then
+        git subtree "$1" --prefix=submissions me50 main || error "Failed to $1 me50 subtree"
+    elif [[ $2 == "profile" ]]; then
+        git subtree "$1" --prefix=profile profile main || error "Failed to $1 profile subtree"
+    else
+        error "Invalid argument: $2. Use 'codespace', 'me50', or 'profile'."
+    fi
+elif [[ $1 == "check-remotes" ]]; then
+    for repo in code50 me50 profile; do
+        repo_upper=$(echo "$repo" | tr '[:lower:]' '[:upper:]')
+        repo_var="${repo_upper}_REPO"
+        repo_url="${!repo_var}"
+
+        debug "current url for remote '${repo}': $(git remote get-url ${repo} 2>/dev/null || echo "not set")"
+        if [[ -z "$(git remote get-url ${repo} 2>/dev/null)" ]]; then
+            warn "Remote repository '${repo}' is not set up locally, attempting to set it up now..."
+            git remote add "${repo}" "${repo_url}" || error "Failed to add remote repository '${repo}'"
+        else
+            if [[ "$(git remote get-url ${repo})" != "${repo_url}" ]]; then
+                warn "Remote repository '${repo}' is set up but does not match the expected URL, updating it now..."
+                git remote set-url "${repo}" "${repo_url}" || error "Failed to update remote repository '${repo}'"
+            else
+                info "Remote repository '${repo}' is set up correctly"
+            fi
+        fi
+    done
+    exit 0
+fi
