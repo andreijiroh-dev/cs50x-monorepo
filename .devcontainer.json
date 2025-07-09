@@ -244,9 +244,40 @@
         "workbench.preferredDarkColorTheme": "GitHub Dark Default",
         "workbench.preferredLightColorTheme": "GitHub Light Default",
         "workbench.startupEditor": "none",
-        //"workbench.statusBar.visible": false,
+        "workbench.statusBar.visible": true,
         "workbench.tips.enabled": false,
-        "workbench.welcomePage.walkthroughs.openOnInstall": false
+        "workbench.welcomePage.walkthroughs.openOnInstall": false,
+
+        // customizations
+        "settingsSync.ignoredExtensions": [
+          "cs50.extension-uninstaller" // avoid sync chaos
+        ],
+        "git.alwaysSignOff": true
+      }
+    },
+    "codespaces": {
+      "repositories": {
+        "andreijiroh-dev/cs50x-monorepo": {
+          "permissions": {
+            "contents": "write",
+            "actions": "write",
+            "workflows": "write"
+          }
+        },
+        "me50/andreijirohdev-cs50x": {
+          "permissions": {
+            "contents": "write",
+            "actions": "write",
+            "workflows": "write"
+          }
+        },
+        "code50/219805467": {
+          "permissions": {
+            "contents": "write",
+            "actions": "write",
+            "workflows": "write"
+          }
+        }
       }
     }
   },
@@ -259,6 +290,11 @@
     8787
   ],
   "image": "ghcr.io/cs50/codespace:canary@sha256:3697364112e732d2ccb9cc3dd81af9cbbdebb52a7febea099a0b805d23c99463",
+  "features": {
+    "ghcr.io/devcontainers/features/ssh": {
+      "version": "latest"
+    }
+  },
   "mounts": [
     {
       "source": "/var/run/docker.sock",
