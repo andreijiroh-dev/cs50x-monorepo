@@ -1,0 +1,10 @@
+# Adopted from https://github.com/cs50/codespace/blob/3c21521a07ea5e2b4caed07d4bbe18022d96e2d0/opt/cs50/bin/postCreateCommand#L12-L50
+# for movies section
+
+# But do ignore these files from movies for now
+**/movies/movies.db
+**/movies/output.txt
+
+# the rest go below this line
+node_modules/
+.env.keys

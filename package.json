@@ -1,0 +1,26 @@
+{
+  "name": "@andreijiroh-dev/cs50x-monorepo",
+  "version": "25.7.0",
+  "description": "all things CS50(x) in one repo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andreijiroh-dev/cs50x-monorepo.git"
+  },
+  "keywords": [
+    "cs50x"
+  ],
+  "author": "Andrei Jiroh Halili <ajhalili2006@andreijiroh.dev>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andreijiroh-dev/cs50x-monorepo/issues"
+  },
+  "homepage": "https://github.com/andreijiroh-dev/cs50x-monorepo#readme",
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.47.1",
+    "npm-check-updates": "^18.0.1"
+  }
+}
