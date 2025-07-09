@@ -277,6 +277,13 @@
             "actions": "write",
             "workflows": "write"
           }
+        },
+        "andreijirohdev-cs50x/andreijirohdev-cs50x": {
+          "permissions": {
+            "contents": "write",
+            "actions": "write",
+            "workflows": "write"
+          }
         }
       }
     }
