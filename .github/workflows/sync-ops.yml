@@ -1,0 +1,46 @@
+name: subtree syncops
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: write
+  id-token: write
+  actions: write
+
+jobs:
+  sync-ops:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Make sure secrets are available
+        uses: andreijiroh-dev/dotenvx-action@v0.4.0
+        id: dotenvx
+        with:
+          inject-env-vars: true
+          key: ${{ secrets.CS50X_DOTENVX_KEY }}
+          path: .env
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "Andrei Jiroh's automation tooling"
+          git config --global user.email "bot@andreijiroh.dev"
+
+      - name: Sync ops subtree
+        run: |
+          DEBUG=1 ./scripts/subtree50 check-remotes
+          ./scripts/subtree50 pull codespaces
+          ./scripts/subtree50 merge profile
+          git push
+        env:
+          CODESPACES: "true"
