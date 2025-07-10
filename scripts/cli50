@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Wrapper script around cli50 (https://cs50.readthedocs.io/cli50/) for pipenv
+
+PIPENV_DONT_LOAD_ENV=true pipenv run -- cli50 "$@"
