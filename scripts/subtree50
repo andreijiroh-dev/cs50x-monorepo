@@ -61,8 +61,8 @@ try_dotenvx_loader
 GH_CS50_UID="${GH_CS60_UID:-"219805467"}"
 GH_CS50_USERNAME="${GH_CS50_USERNAME:-"andreijirohdev-cs50x"}"
 ## main GitHub account for mirroring and subtree commands, usued at the moment
-GH_UID="${GH_UID:-"219805467"}"
-GH_USERNAME="${GH_USERNAME:-"ajhalili2006"}"
+#GH_UID="${GH_UID:-"219805467"}"
+#GH_USERNAME="${GH_USERNAME:-"ajhalili2006"}"
 GH_CS50_TOKEN="${GH_CS50_TOKEN}"
 
 CODE50_REPO="https://${GH_CS50_USERNAME}:${GH_CS50_TOKEN}@github.com/code50/${GH_CS50_UID}.git"
