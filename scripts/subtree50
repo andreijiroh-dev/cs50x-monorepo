@@ -40,6 +40,7 @@ try_dotenvx_loader() {
             warn ".env.keys not found in workspace root or running in GitHub Codespaces"
         fi
     else
+        try_codespaces_loader
     fi
 }
 
