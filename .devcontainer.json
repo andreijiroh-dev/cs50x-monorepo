@@ -10,8 +10,9 @@
         "/opt/cs50/extensions/style50-0.0.1.vsix",
         "cs50.extension-uninstaller",
         "inferrinizzard.prettier-sql-vscode",
+        "mtxr.sqltools",
         "mathematic.vscode-pdf",
-        "ms-azuretools.vscode-docker",
+        "ms-azuretools.vscode-containers",
         "ms-ceintl.vscode-language-pack-cs",
         "ms-ceintl.vscode-language-pack-de",
         "ms-ceintl.vscode-language-pack-es",
@@ -61,14 +62,14 @@
         "editor.autoClosingQuotes": "never",
         "editor.colorDecorators": false,
         "editor.emptySelectionClipboard": false,
-        "editor.folding": false,
-        "editor.foldingHighlight": false,
+        //"editor.folding": false,
+        //"editor.foldingHighlight": false,
         "editor.formatOnSave": false,
         "editor.guides.indentation": false,
         "editor.hover.enabled": false,
         "editor.lightbulb.enabled": "off",
         "editor.matchBrackets": "never",
-        "editor.minimap.enabled": false,
+        //"editor.minimap.enabled": false,
         "editor.mouseWheelZoom": true,
         "editor.occurrencesHighlight": "off",
         "editor.parameterHints.enabled": false,
@@ -115,7 +116,8 @@
         "files.watcherExclude": {
           "**/.git/objects/**": true,
           "**/.git/subtree-cache/**": true,
-          "**/node_modules/*/**": true
+          "**/node_modules/*/**": true,
+          "**/.cache/**": true
         },
         "git.autofetch": true,
         "git.decorations.enabled": false,
@@ -184,7 +186,7 @@
         "remote.otherPortsAttributes": {
           "onAutoForward": "silent"
         },
-        "scm.countBadge": "off",
+        //"scm.countBadge": "off",
         "terminal.integrated.commandsToSkipShell": [
           "workbench.action.toggleSidebarVisibility"
         ],
@@ -239,12 +241,12 @@
         "workbench.editorAssociations": {
           "*.wav": "vscode.audioPreview"
         },
-        "workbench.iconTheme": "vs-minimal",
+        //"workbench.iconTheme": "vs-minimal",
         "workbench.layoutControl.enabled": false,
-        "workbench.preferredDarkColorTheme": "GitHub Dark Default",
-        "workbench.preferredLightColorTheme": "GitHub Light Default",
+        //"workbench.preferredDarkColorTheme": "GitHub Dark Default",
+        //"workbench.preferredLightColorTheme": "GitHub Light Default",
         "workbench.startupEditor": "none",
-        "workbench.statusBar.visible": true,
+
         "workbench.tips.enabled": false,
         "workbench.welcomePage.walkthroughs.openOnInstall": false,
 
@@ -252,7 +254,17 @@
         "settingsSync.ignoredExtensions": [
           "cs50.extension-uninstaller" // avoid sync chaos
         ],
-        "git.alwaysSignOff": true
+        "git.alwaysSignOff": true,
+        "workbench.iconTheme": "material-icon-theme",
+        "workbench.productIconTheme": "material-product-icons",
+        // don't ask why colorblind color themes were used even through I
+        // am not technically colorblind
+        "workbench.preferredDarkColorTheme": "GitHub Dark Colorblind (Beta)",
+        "workbench.preferredLightColorTheme": "GitHub Light Colorblind (Beta)",
+        "workbench.statusBar.visible": true,
+        "editor.suggest.showStatusBar": true,
+        "editor.minimap.autohide": true,
+        "editor.minimap.enabled": true
       }
     },
     "codespaces": {
@@ -298,7 +310,7 @@
   ],
   "image": "ghcr.io/cs50/codespace:canary@sha256:3697364112e732d2ccb9cc3dd81af9cbbdebb52a7febea099a0b805d23c99463",
   "features": {
-    "ghcr.io/devcontainers/features/ssh": {
+    "ghcr.io/devcontainers/features/sshd:latest": {
       "version": "latest"
     }
   },
