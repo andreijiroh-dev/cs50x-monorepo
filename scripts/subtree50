@@ -26,9 +26,7 @@ debug() {
 
 try_codespaces_loader() {
     if [[ $CODESPACES == "true" ]]; then
-        CS50_GH_TOKEN="${CS50_TOKEN}"
-        CS50_GH_USERNAME="${CS50_USER}"
-        CS50_GH_UID="${RepositoryName}"
+        export CS50_GH_TOKEN="${CS50_TOKEN}" CS50_GH_USERNAME="${CS50_USER}" CS50_GH_UID="${RepositoryName}"
     fi
 }
 
