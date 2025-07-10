@@ -26,7 +26,9 @@ debug() {
 
 try_codespaces_loader() {
     if [[ $CODESPACES == "true" ]]; then
-        export CS50_GH_TOKEN="${CS50_TOKEN}" CS50_GH_USERNAME="${CS50_USER}" CS50_GH_UID="${RepositoryName}"
+        CS50_GH_TOKEN="${CS50_TOKEN}"
+        CS50_GH_USERNAME="${GITHUB_USER}"
+        CS50_GH_UID="${RepositoryName}"
     fi
 }
 
@@ -58,7 +60,7 @@ try_dotenvx_loader
 
 ## CS50x-specific GitHub account, do not override if we're
 ## inside codespaces
-if [[$CODESPACES != "true" ]]; then
+if [[ $CODESPACES != "true" ]]; then
     GH_CS50_UID="${GH_CS60_UID:-"219805467"}"
     GH_CS50_USERNAME="${GH_CS50_USERNAME:-"andreijirohdev-cs50x"}"
     ## main GitHub account for mirroring and subtree commands, usued at the moment
