@@ -26,9 +26,8 @@ debug() {
 
 try_codespaces_loader() {
     if [[ $CODESPACES == "true" ]]; then
-        CS50_GH_TOKEN="${CS50_TOKEN}"
-        CS50_GH_USERNAME="${GITHUB_USER}"
-        CS50_GH_UID="${RepositoryName}"
+        CS50_UID="${RepositoryName}"
+        CS50_USER="${GITHUB_USER}"
     fi
 }
 
@@ -40,7 +39,7 @@ try_dotenvx_loader() {
             warn ".env.keys not found in workspace root or running in GitHub Codespaces"
         fi
     else
-        t
+        warn "dotenvx is not installed, try again by running 'npm i' in this workspace or https://cs50.dev/open"
     fi
 }
 
@@ -57,26 +56,16 @@ help() {
 
 # load configs from .env first
 try_dotenvx_loader
+try_codespaces_loader
 
-## CS50x-specific GitHub account, do not override if we're
-## inside codespaces
-if [[ $CODESPACES != "true" ]]; then
-    GH_CS50_UID="${GH_CS60_UID:-"219805467"}"
-    GH_CS50_USERNAME="${GH_CS50_USERNAME:-"andreijirohdev-cs50x"}"
-    ## main GitHub account for mirroring and subtree commands, usued at the moment
-    #GH_UID="${GH_UID:-"219805467"}"
-    #GH_USERNAME="${GH_USERNAME:-"ajhalili2006"}"
-    GH_CS50_TOKEN="${GH_CS50_TOKEN}"
-fi
-
-CODE50_REPO="https://${GH_CS50_USERNAME}:${GH_CS50_TOKEN}@github.com/code50/${GH_CS50_UID}.git"
-ME50_REPO="https://${GH_CS50_USERNAME}:${GH_CS50_TOKEN}@github.com/me50/${GH_CS50_USERNAME}.git"
-PROFILE_REPO="https://${GH_CS50_USERNAME}:${GH_CS50_TOKEN}@github.com/${GH_CS50_USERNAME}/${GH_CS50_USERNAME}.git"
+CODE50_REPO="https://${CS50_USER}:${CS50_TOKEN}@github.com/code50/${CS50_UID}.git"
+ME50_REPO="https://${CS50_USER}:${CS50_TOKEN}@github.com/me50/${CS50_USER}.git"
+PROFILE_REPO="https://${CS50_USER}:${CS50_TOKEN}@github.com/${CS50_USER}/${CS50_USER}.git"
 
 if [[ $1 == "" || $1 == "--help" || $1 == "-h" || "$1" == "help" ]]; then
     help
 elif [[ $1 == "push" || $1 == "pull" || $1 == "merge" || $1 == "add" || $1 == "merge" || "$1" == "spilt" ]]; then
-    if [ -z "${CS50_TOKEN}" -z "${GH_CS50_TOKEN}" ]; then
+    if [ -z "${CS50_TOKEN}" ] || [ -z "${GH_CS50_TOKEN}" ]; then
         error "missing dedicated GitHub token for CS50x-specific account, see warnings above or try again in https://cs50.dev/open"
     fi
     if [[ $2 == "codespace" ]]; then
