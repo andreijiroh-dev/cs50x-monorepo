@@ -32,7 +32,9 @@ try_dotenvx_loader() {
             warn ".env.keys not found in workspace root or running in GitHub Codespaces"
         fi
     else
-        warn "dotenvx command not found, run 'npm i' to install dotenvx (and friends)"
+        if [[ $CODESPACES == "true" ]]; then
+            CS50_GH_TOKEN="${CS50_TOKEN}"
+        fi
     fi
 }
 
