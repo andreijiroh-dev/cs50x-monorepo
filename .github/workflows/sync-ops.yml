@@ -9,8 +9,9 @@ on:
     - cron: '0 0 * * *'
 
 jobs:
-  sync-ops:
-    runs-on: ubuntu-latest
+  pull:
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest'
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v3
@@ -33,7 +34,7 @@ jobs:
           git config --global user.email "bot@andreijiroh.dev"
           git remote set-url origin "https://${{ steps.dotenvx.outputs.GH_CS50_USERNAME }}:${{ steps.dotenvx.outputs.GH_CS50_TOKEN }}@github.com/${{github.repository}}"
 
-      - name: Sync ops subtree
+      - name: Pull commits from the subtrees
         run: |
           echo "::group::Setting up subtree remotes"
           DEBUG=1 ./scripts/subtree50 check-remotes
@@ -43,6 +44,50 @@ jobs:
           ./scripts/subtree50 pull codespace || echo "::warning title='subtree50: failed to pull codespace'::skipped due to merge conflicts or other issues ($?)"
           ./scripts/subtree50 pull profile || echo "::warning title='subtree50: failed to pull profile'::skipped due to merge conflicts or other issues ($?)"
           echo "::endgroup::"
+
+          git push
+        env:
+          CODESPACES: "true"
+
+  push:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait until the repository is ready on scheduled and manual runs
+        run: sleep 120
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
+
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Make sure secrets are available
+        uses: andreijiroh-dev/dotenvx-action@v0.4.0
+        id: dotenvx
+        with:
+          inject-env-vars: true
+          key: ${{ secrets.CS50X_DOTENVX_KEY }}
+          path: .env
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "Andrei Jiroh's automation tooling"
+          git config --global user.email "bot@andreijiroh.dev"
+          git remote set-url origin "https://${{ steps.dotenvx.outputs.GH_CS50_USERNAME }}:${{ steps.dotenvx.outputs.GH_CS50_TOKEN }}@github.com/${{github.repository}}"
+
+      - name: Push
+        run: |
+          echo "::group::Setting up subtree remotes"
+          DEBUG=1 ./scripts/subtree50 check-remotes
+          echo "::endgroup::"
+
+          #echo "::group::Attempting to pull subtrees"
+          #./scripts/subtree50 pull codespace || echo "::warning title='subtree50: failed to pull codespace'::skipped due to merge conflicts or other issues ($?)"
+          #./scripts/subtree50 pull profile || echo "::warning title='subtree50: failed to pull profile'::skipped due to merge conflicts or other issues ($?)"
+          #echo "::endgroup::"
 
           echo "::group::Attempting to push changes"
           ./scripts/subtree50 push codespace || echo "::warning title='subtree50: failed to push codespace'::skipped due to merge conflicts or other issues ($?)"
