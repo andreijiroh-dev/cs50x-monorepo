@@ -1,1 +1,0 @@
-# andreijirohdev-cs50x
