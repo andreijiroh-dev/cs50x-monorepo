@@ -8,11 +8,6 @@ on:
   schedule:
     - cron: '0 0 * * *'
 
-permissions:
-  contents: write
-  id-token: write
-  actions: write
-
 jobs:
   sync-ops:
     runs-on: ubuntu-latest
@@ -22,6 +17,7 @@ jobs:
         with:
           ref: main
           fetch-depth: 0
+          persist-credentials: false
 
       - name: Make sure secrets are available
         uses: andreijiroh-dev/dotenvx-action@v0.4.0
@@ -35,13 +31,24 @@ jobs:
         run: |
           git config --global user.name "Andrei Jiroh's automation tooling"
           git config --global user.email "bot@andreijiroh.dev"
+          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${{ steps.dotenvx.outputs.GH_CS50_TOKEN }}"
 
       - name: Sync ops subtree
         run: |
+          echo "::group::Setting up subtree remotes"
           DEBUG=1 ./scripts/subtree50 check-remotes
+          echo "::endgroup::"
+
+          echo "::group::Synchorizing subtrees"
           ./scripts/subtree50 pull codespace
-          ./scripts/subtree50 pull me50
-          ./scripts/subtree50 merge profile
+          #./scripts/subtree50 pull me50
+          ./scripts/subtree50 pull profile
+          echo "::endgroup::"
+
+          echo "::group::Pushing changes"
+          ./scripts/subtree50 push codespace
+          ./scripts/subtree50 push profile
           git push
+          echo "::endgroup::"
         env:
           CODESPACES: "true"
