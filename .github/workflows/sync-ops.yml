@@ -39,15 +39,14 @@ jobs:
           DEBUG=1 ./scripts/subtree50 check-remotes
           echo "::endgroup::"
 
-          echo "::group::Synchorizing subtrees"
-          ./scripts/subtree50 pull codespace
-          #./scripts/subtree50 pull me50
-          ./scripts/subtree50 pull profile
+          echo "::group::Attempting to pull subtrees"
+          ./scripts/subtree50 pull codespace || echo "::warning title='subtree50: failed to pull codespace'::skipped due to merge conflicts or other issues ($?)"
+          ./scripts/subtree50 pull profile || echo "::warning title='subtree50: failed to pull profile'::skipped due to merge conflicts or other issues ($?)"
           echo "::endgroup::"
 
-          echo "::group::Pushing changes"
-          ./scripts/subtree50 push codespace
-          ./scripts/subtree50 push profile
+          echo "::group::Attempting to push changes"
+          ./scripts/subtree50 push codespace || echo "::warning title='subtree50: failed to push codespace'::skipped due to merge conflicts or other issues ($?)"
+          ./scripts/subtree50 push profile || echo "::warning title='subtree50: failed to push profile'::skipped due to merge conflicts or other issues ($?)"
           git push
           echo "::endgroup::"
         env:
