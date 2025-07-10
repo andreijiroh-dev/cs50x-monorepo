@@ -76,7 +76,7 @@ PROFILE_REPO="https://${GH_CS50_USERNAME}:${GH_CS50_TOKEN}@github.com/${GH_CS50_
 if [[ $1 == "" || $1 == "--help" || $1 == "-h" || "$1" == "help" ]]; then
     help
 elif [[ $1 == "push" || $1 == "pull" || $1 == "merge" || $1 == "add" || $1 == "merge" || "$1" == "spilt" ]]; then
-    if [ -z "${GH_CS50_TOKEN}" ]; then
+    if [ -z "${CS50_TOKEN}" -z "${GH_CS50_TOKEN}" ]; then
         error "missing dedicated GitHub token for CS50x-specific account, see warnings above or try again in https://cs50.dev/open"
     fi
     if [[ $2 == "codespace" ]]; then
