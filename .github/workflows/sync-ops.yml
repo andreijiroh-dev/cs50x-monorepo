@@ -31,7 +31,7 @@ jobs:
         run: |
           git config --global user.name "Andrei Jiroh's automation tooling"
           git config --global user.email "bot@andreijiroh.dev"
-          git config --local http.https://github.com/.extraheader "AUTHORIZATION: basic ${{ steps.dotenvx.outputs.GH_CS50_TOKEN }}"
+          git remote set-url origin "https://${{ steps.dotenvx.outputs.GH_CS50_USERNAME }}:${{ steps.dotenvx.outputs.GH_CS50_TOKEN }}@github.com/${{github.repository}}"
 
       - name: Sync ops subtree
         run: |
