@@ -21,6 +21,7 @@
   "homepage": "https://github.com/andreijiroh-dev/cs50x-monorepo#readme",
   "dependencies": {
     "@dotenvx/dotenvx": "^1.47.1",
+    "git-resolve-conflict": "^2.0.0",
     "npm-check-updates": "^18.0.1"
   }
 }
