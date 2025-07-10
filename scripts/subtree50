@@ -24,6 +24,14 @@ debug() {
     [[ $DEBUG != "" ]] && echo "Debug: $1"
 }
 
+try_codespaces_loader() {
+    if [[ $CODESPACES == "true" ]]; then
+        CS50_GH_TOKEN="${CS50_TOKEN}"
+        CS50_GH_USERNAME="${CS50_USER}"
+        CS50_GH_UID="${RepositoryName}"
+    fi
+}
+
 try_dotenvx_loader() {
     if command -v dotenvx &> /dev/null; then
         if [[ $CODESPACES != "true" ]] && [[ -f "$PWD/.env.keys" ]]; then
@@ -32,9 +40,6 @@ try_dotenvx_loader() {
             warn ".env.keys not found in workspace root or running in GitHub Codespaces"
         fi
     else
-        if [[ $CODESPACES == "true" ]]; then
-            CS50_GH_TOKEN="${CS50_TOKEN}"
-        fi
     fi
 }
 
