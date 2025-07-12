@@ -6,12 +6,13 @@ on:
       - main
   workflow_dispatch:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: '0 */3 * * *'
 
 jobs:
   pull:
+    name: Pull changes from different remotes (scheduled and manual runs)
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest'
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout main branch
         uses: actions/checkout@v3
@@ -50,13 +51,10 @@ jobs:
           CODESPACES: "true"
 
   push:
+    name: Push changes to subtrees (on each push to monorepo)
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
     steps:
-      - name: Wait until the repository is ready on scheduled and manual runs
-        run: sleep 120
-        if: github.event_name == 'workflow_dispatch' || github.event_name == 'schedule'
-
       - name: Checkout main branch
         uses: actions/checkout@v3
         with:
